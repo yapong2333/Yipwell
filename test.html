@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>发送按钮测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .chat-input-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .chat-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            outline: none;
+        }
+        .send-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .send-button:hover {
+            background: #0056b3;
+            transform: scale(1.05);
+        }
+        .send-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            opacity: 0.7;
+        }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h2>发送按钮测试</h2>
+        <p>这个页面用于测试发送按钮是否正常工作。</p>
+        
+        <div class="chat-input-container">
+            <input type="text" class="chat-input" id="chatInput" placeholder="输入测试消息...">
+            <button class="send-button" id="sendButton" type="button">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+        
+        <div class="log" id="log"></div>
+    </div>
+
+    <script>
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            const time = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `[${time}] ${message}<br>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) {
+                log('❌ 消息为空，不发送');
+                return;
+            }
+            
+            log(`✅ 发送消息: "${message}"`);
+            input.value = '';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            log('🚀 页面加载完成');
+            
+            const sendButton = document.getElementById('sendButton');
+            const chatInput = document.getElementById('chatInput');
+            
+            if (sendButton) {
+                log('✅ 发送按钮已找到');
+                
+                sendButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    log('🖱️ 发送按钮被点击');
+                    sendMessage();
+                });
+                
+                sendButton.addEventListener('mouseenter', function() {
+                    log('🖱️ 鼠标悬停在发送按钮上');
+                });
+            } else {
+                log('❌ 发送按钮未找到！');
+            }
+            
+            if (chatInput) {
+                log('✅ 输入框已找到');
+                
+                chatInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        log('⌨️ 回车键被按下');
+                        sendMessage();
+                    }
+                });
+            } else {
+                log('❌ 输入框未找到！');
+            }
+            
+            // 测试按钮状态
+            setTimeout(() => {
+                log(`🔍 按钮状态: disabled=${sendButton.disabled}, style=${sendButton.style.cssText}`);
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
